@@ -6,6 +6,8 @@ import { colors, fontSize } from "../config/theme";
 
 import SplashScreen from "../features/auth/screens/SplashScreen";
 import OnboardingScreen from "../features/auth/screens/OnboardingScreen";
+import AuthOptionsScreen from "../features/auth/screens/AuthOptionsScreen";
+import LoginScreen from "../features/auth/screens/LoginScreen";
 import RegistrationScreen from "../features/auth/screens/RegistrationScreen";
 import OtpVerificationScreen from "../features/auth/screens/OtpVerificationScreen";
 import DashboardScreen from "../features/dashboard/DashboardScreen";
@@ -137,6 +139,16 @@ const AppNavigator: React.FC = () => {
 				name="Onboarding"
 				component={OnboardingScreen}
 				options={{ headerShown: false }}
+			/>
+			<Stack.Screen
+				name="AuthOptions"
+				component={AuthOptionsScreen}
+				options={{ headerShown: false }}
+			/>
+			<Stack.Screen
+				name="Login"
+				component={LoginScreen}
+				options={{ headerTitle: "Login" }}
 			/>
 			<Stack.Screen
 				name="Registration"

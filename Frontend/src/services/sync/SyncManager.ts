@@ -3,6 +3,8 @@ import connectivityService from '../connectivity/ConnectivityService';
 import type { PendingRequest } from '../../types/common';
 import type { ConnectionStatus } from '../../types/common';
 import { env } from '../../config';
+import { STORAGE_KEYS } from '../../utils/constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface ISyncManager {
   startAutoSync(): void;
@@ -112,9 +114,16 @@ class SyncManager implements ISyncManager {
     if (!endpoint) return false;
 
     try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      const stored = await AsyncStorage.getItem(STORAGE_KEYS.AUTH_TOKENS);
+      if (stored) {
+        const tokens = JSON.parse(stored);
+        const token = tokens.access_token || tokens.accessToken;
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+      }
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(request.payload),
       });
       return response.ok;

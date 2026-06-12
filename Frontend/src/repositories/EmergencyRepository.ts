@@ -21,10 +21,7 @@ export class EmergencyRepository implements IEmergencyRepository {
   }
 
   async getAll(): Promise<ApiResponse<EmergencyCardData[]>> {
-    // The backend GET /requests/ returns the user's requests
-    // For the volunteer feed, we might need a separate endpoint
-    // Using GET /notifications/ could give nearby emergencies
-    return apiClient.get<EmergencyCardData[]>('/requests/');
+    return apiClient.get<EmergencyCardData[]>('/requests/feed');
   }
 
   async getById(id: string): Promise<ApiResponse<EmergencyRequest>> {

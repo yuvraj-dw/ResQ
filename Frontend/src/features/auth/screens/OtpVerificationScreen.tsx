@@ -20,8 +20,8 @@ const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { phone } = route.params || {};
-  const { verifyAppRegistration, isLoading, registrationData } = useAuth();
+  const { phone, mode } = route.params || {};
+  const { verifyAppRegistration, verifyOtp, sendOtp, isLoading, registrationData } = useAuth();
 
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(60);
@@ -75,10 +75,14 @@ const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
     }
     setError('');
 
-    const result = await verifyAppRegistration({
-      phone: phone || registrationData?.phone || '',
-      otp: otpString,
-    });
+    const phoneNumber = phone || registrationData?.phone || '';
+    let result;
+
+    if (mode === 'login') {
+      result = await verifyOtp(phoneNumber, otpString);
+    } else {
+      result = await verifyAppRegistration({ phone: phoneNumber, otp: otpString });
+    }
 
     if (result.success) {
       navigation.reset({
@@ -90,12 +94,16 @@ const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
     }
   };
 
-  const handleResend = () => {
+  const handleResend = async () => {
     if (!canResend) return;
     setTimer(60);
     setCanResend(false);
     setOtp(['', '', '', '', '', '']);
     setError('');
+
+    const phoneNumber = phone || registrationData?.phone || '';
+    await sendOtp(phoneNumber);
+
     inputRefs.current[0]?.focus();
   };
 

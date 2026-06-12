@@ -54,10 +54,10 @@ const MapScreen: React.FC<MapScreenProps> = ({ navigation }) => {
       <EmergencyMap
         userLocation={userLocation}
         emergencyLocation={
-          selectedEmergency
+          selectedEmergency && selectedEmergency.latitude
             ? {
-                latitude: 23.2599,
-                longitude: 77.4126,
+                latitude: selectedEmergency.latitude,
+                longitude: selectedEmergency.longitude!,
               }
             : null
         }

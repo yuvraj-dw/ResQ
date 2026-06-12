@@ -38,12 +38,12 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
 
   const handleGetStarted = async () => {
     await storageService.setOnboardingStatus(true);
-    navigation.replace('Registration');
+    navigation.replace('AuthOptions');
   };
 
   const handleSkip = async () => {
     await storageService.setOnboardingStatus(true);
-    navigation.replace('Registration');
+    navigation.replace('AuthOptions');
   };
 
   const renderItem = ({ item }: { item: typeof ONBOARDING_DATA[0] }) => (

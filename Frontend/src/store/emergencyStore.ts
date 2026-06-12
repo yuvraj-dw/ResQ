@@ -61,6 +61,8 @@ function toCardData(r: EmergencyRequest): EmergencyCardData {
     time_ago: timeAgo,
     current_radius_km: r.current_radius_km,
     created_at: r.created_at,
+    latitude: r.location?.coordinates?.[1],
+    longitude: r.location?.coordinates?.[0],
   };
 }
 

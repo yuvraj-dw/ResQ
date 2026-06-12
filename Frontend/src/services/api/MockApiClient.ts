@@ -55,7 +55,7 @@ const mockEmergencies: EmergencyRequest[] = [
     source: 'app',
     resource: 'transport',
     blood_group: null,
-    urgency: 'urgent',
+    urgency: 'high',
     location_name: 'Hoshangabad Road',
     location: { type: 'Point', coordinates: [77.4308, 23.2378] },
     raw_message: null,
@@ -72,7 +72,7 @@ const mockEmergencies: EmergencyRequest[] = [
     source: 'sms',
     resource: 'medicines',
     blood_group: null,
-    urgency: 'normal',
+    urgency: 'medium',
     location_name: 'Old City',
     location: { type: 'Point', coordinates: [77.3975, 23.2217] },
     raw_message: 'Need medicines urgently',
@@ -209,6 +209,8 @@ export class MockApiClient {
         time_ago: `${Math.floor(Math.random() * 60) + 1}m ago`,
         current_radius_km: e.current_radius_km,
         created_at: e.created_at,
+        latitude: e.location?.coordinates[1],
+        longitude: e.location?.coordinates[0],
       }));
     return { success: true, data: cards };
   }

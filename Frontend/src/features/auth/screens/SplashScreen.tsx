@@ -4,6 +4,7 @@ import * as Location from 'expo-location';
 import { colors, fontSize, spacing } from '../../../config/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { STORAGE_KEYS } from '../../../utils/constants';
+import { useAuthStore } from '../../../store/authStore';
 
 interface SplashScreenProps {
   navigation: any;
@@ -19,14 +20,17 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
     const init = async () => {
       await Location.requestForegroundPermissionsAsync();
 
-      const stored = await AsyncStorage.getItem(STORAGE_KEYS.AUTH_TOKENS);
+      const authStore = useAuthStore.getState();
+      await authStore.checkAuth();
+      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+
       const onboardingDone = await AsyncStorage.getItem(STORAGE_KEYS.ONBOARDING_COMPLETED);
 
       setTimeout(() => {
-        if (stored) {
+        if (isAuthenticated) {
           navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
         } else if (onboardingDone === 'true') {
-          navigation.reset({ index: 0, routes: [{ name: 'Registration' }] });
+          navigation.reset({ index: 0, routes: [{ name: 'AuthOptions' }] });
         } else {
           navigation.reset({ index: 0, routes: [{ name: 'Onboarding' }] });
         }

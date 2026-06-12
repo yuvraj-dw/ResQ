@@ -75,8 +75,8 @@ class ApiClient {
       requestHeaders.Authorization = `Bearer ${this.accessToken}`;
     }
 
+    const url = `${this.baseUrl}${API_PREFIX}${endpoint}`;
     try {
-      const url = `${this.baseUrl}${API_PREFIX}${endpoint}`;
       this.logRequest(method, url, body);
 
       const response = await fetch(url, {

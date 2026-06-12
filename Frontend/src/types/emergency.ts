@@ -1,5 +1,5 @@
 export type EmergencyResource = 'blood' | 'transport' | 'medicines' | 'food' | 'shelter';
-export type EmergencyUrgency = 'critical' | 'urgent' | 'normal';
+export type EmergencyUrgency = 'critical' | 'high' | 'medium' | 'low';
 export type EmergencySource = 'app' | 'sms';
 export type EmergencyStatus = 'open' | 'matched' | 'assigned' | 'completed' | 'cancelled';
 
@@ -45,6 +45,8 @@ export interface EmergencyCardData {
   time_ago: string;
   current_radius_km: number;
   created_at: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface EmergencyFormData {
