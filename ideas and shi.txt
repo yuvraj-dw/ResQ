@@ -1,9 +1,0 @@
-websocket/continuously refersh or soemthing list of requests to the volunteer in app so the volunteer doesn't have to refresh the app for new requests - done
-change openrouter to deepinfra - done
-merge send otp into app register api call - done
-differentiate between sms register and app regiter through url - done
-
-optional/to be expected
-if app user doesn't register the otp in time, delete its details from the db 
-add distance priority for volunteer finding
-agar sms wala banda login through app kare to bolio user already exists verify otp 
