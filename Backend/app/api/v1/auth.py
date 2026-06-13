@@ -64,14 +64,6 @@ async def verify_otp(request: OTPVerifyRequest):
         )
     token, user_data = result
     user_repo = UserRepo()
-
-    if request.latitude is not None and request.longitude is not None:
-        location = {
-            "type": "Point",
-            "coordinates": [request.longitude, request.latitude],
-        }
-        await user_repo.update_location(request.phone, location)
-
     user = await user_repo.get_by_phone(request.phone)
     return TokenResponse(
         access_token=token,
@@ -295,4 +287,8 @@ async def login(request: OTPSendRequest):
     result = await auth_service.send_otp(request.phone)
     await sms_service.send_otp(request.phone, result["otp"])
 
-    return {"message": "OTP sent successfully", "phone": request.phone}
+    return {
+        "message": "You are already registered. Please verify OTP to login.",
+        "phone": request.phone,
+        "is_existing_user": True,
+    }

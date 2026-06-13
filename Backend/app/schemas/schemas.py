@@ -33,8 +33,6 @@ class OTPSendRequest(BaseModel):
 class OTPVerifyRequest(BaseModel):
     phone: str
     otp: str
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
 
     @validator("phone")
     def validate_phone(cls, v):
