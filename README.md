@@ -26,15 +26,6 @@ When an SMS comes in, an on-device AI (Meta LLaMA 3.1 via DeepInfra) parses the 
 
 ---
 
-## Demo
-
-> _Screenshots and demo video coming soon._
-
-| App Flow | SMS Flow |
-|---|---|
-| ![App screenshot placeholder](https://via.placeholder.com/400x250?text=App+Flow+Screenshot) | ![SMS screenshot placeholder](https://via.placeholder.com/400x250?text=SMS+Flow+Screenshot) |
-
----
 
 ## Features
 
