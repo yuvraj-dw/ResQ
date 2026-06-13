@@ -43,7 +43,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>🚨</Text>
-      <Text style={styles.title}>Emergency Connect</Text>
+      <Text style={styles.title}>ResQ</Text>
       <Text style={styles.subtitle}>Community Response Network</Text>
       <ActivityIndicator color={colors.white} style={styles.loader} />
     </View>

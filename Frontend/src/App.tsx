@@ -24,7 +24,7 @@ const App: React.FC = () => {
   }, []);
 
   const linking = {
-    prefixes: ["emergencyconnect://", "https://emergencyconnect.dev"],
+    prefixes: ["resq://", "https://resq.app"],
     config: {
       screens: {
         EmergencyDetail: "emergency/:emergencyId",

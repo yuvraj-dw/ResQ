@@ -5,7 +5,7 @@ import type { AppRegisterRequest } from '../../types/auth';
 export class ApiCommunicationService extends BaseCommunicationService {
   private apiEndpoint: string;
 
-  constructor(apiEndpoint = 'https://api.emergencyconnect.dev/api/v1') {
+  constructor(apiEndpoint = 'https://api.resq.app/api/v1') {
     super();
     this.apiEndpoint = apiEndpoint;
   }

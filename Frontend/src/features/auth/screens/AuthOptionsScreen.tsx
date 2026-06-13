@@ -14,7 +14,7 @@ const AuthOptionsScreen: React.FC<AuthOptionsScreenProps> = ({
 		<View style={styles.container}>
 			<View style={styles.header}>
 				<Text style={styles.logo}>🚨</Text>
-				<Text style={styles.title}>Emergency Connect</Text>
+				<Text style={styles.title}>ResQ</Text>
 				<Text style={styles.subtitle}>Community Response Network</Text>
 			</View>
 

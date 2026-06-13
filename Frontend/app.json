@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Emergency Connect",
-    "slug": "emergency-connect",
+    "name": "ResQ",
+    "slug": "resq",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,11 +16,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.emergencyconnect.app",
+      "bundleIdentifier": "com.resq.app",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Emergency Connect needs your location to show nearby emergencies and share your location with responders.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Emergency Connect needs your location in the background to notify you of nearby emergencies.",
-        "NSPhotoLibraryUsageDescription": "Emergency Connect needs photo library access for profile pictures."
+        "NSLocationWhenInUseUsageDescription": "ResQ needs your location to show nearby emergencies and share your location with responders.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "ResQ needs your location in the background to notify you of nearby emergencies.",
+        "NSPhotoLibraryUsageDescription": "ResQ needs photo library access for profile pictures."
       }
     },
     "android": {
@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#DC143C"
       },
-      "package": "com.emergencyconnect.app",
+      "package": "com.resq.app",
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
@@ -51,8 +51,8 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Emergency Connect needs your location to show nearby emergencies and share your location with responders.",
-          "locationWhenInUsePermission": "Emergency Connect needs your location to show nearby emergencies."
+          "locationAlwaysAndWhenInUsePermission": "ResQ needs your location to show nearby emergencies and share your location with responders.",
+          "locationWhenInUsePermission": "ResQ needs your location to show nearby emergencies."
         }
       ],
       [

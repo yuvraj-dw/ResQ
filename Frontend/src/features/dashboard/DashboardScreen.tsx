@@ -93,7 +93,7 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ navigation }) => {
       )}
 
       <View style={styles.greeting}>
-        <Text style={styles.greetingTitle}>Emergency Connect</Text>
+        <Text style={styles.greetingTitle}>ResQ</Text>
         <Text style={styles.greetingSubtitle}>
           {emergencies.length} active emergency{emergencies.length !== 1 ? 'ies' : ''} near you
         </Text>

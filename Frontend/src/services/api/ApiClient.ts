@@ -142,7 +142,7 @@ class ApiClient {
 }
 
 const apiClient = new ApiClient(
-  process.env.EXPO_PUBLIC_API_URL || 'https://api.emergencyconnect.dev',
+  process.env.EXPO_PUBLIC_API_URL || 'https://api.resq.app',
 );
 
 export { ApiClient };

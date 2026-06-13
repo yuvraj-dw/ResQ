@@ -1,4 +1,4 @@
-# Emergency Connect
+# ResQ
 
 A production-ready React Native mobile application for community-based emergency assistance. Users can request help during emergencies and nearby users can respond, with support for both online and offline operation.
 
@@ -69,7 +69,7 @@ src/
 
 ```bash
 # Install dependencies
-cd EmergencyConnect
+cd ResQ
 npm install
 
 # Start the Expo development server
@@ -81,7 +81,7 @@ npx expo start
 Copy `.env` to configure the app:
 
 ```env
-EXPO_PUBLIC_API_URL=https://api.emergencyconnect.dev/v1
+EXPO_PUBLIC_API_URL=https://api.resq.app/v1
 EXPO_PUBLIC_SMS_GATEWAY_ENABLED=false
 EXPO_PUBLIC_SMS_GATEWAY_NUMBER=+1234567890
 EXPO_PUBLIC_MAP_PROVIDER=default
