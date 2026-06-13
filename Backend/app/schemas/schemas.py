@@ -126,6 +126,7 @@ class RequestCreate(BaseModel):
 
 class RequestResponse(BaseModel):
     id: str = Field(..., alias="_id")
+    short_id: Optional[str] = None
     requester_id: Optional[str] = None
     requester_phone: str
     source: str
@@ -138,6 +139,7 @@ class RequestResponse(BaseModel):
     status: RequestStatus
     assigned_volunteer: Optional[str] = None
     current_radius_km: float = 5.0
+    advisory: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

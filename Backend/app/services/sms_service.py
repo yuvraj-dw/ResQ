@@ -50,8 +50,11 @@ class SMSService:
         message = f"Your ResQ Auth Code is: {otp} "
         return await self.send_sms(phone, message)
 
-    async def send_request_received(self, phone: str, resource: str, location: str) -> Optional[dict]:
-        message = f"Emergency request received for {resource} near {location}. Searching for volunteers nearby..."
+    async def send_request_received(self, phone: str, resource: str, location: str, short_id: str = None) -> Optional[dict]:
+        if short_id:
+            message = f"Emergency request received for {resource} near {location}. (ID: {short_id}) Searching for volunteers nearby..."
+        else:
+            message = f"Emergency request received for {resource} near {location}. Searching for volunteers nearby..."
         return await self.send_sms(phone, message)
 
     async def send_search_expanded(self, phone: str, radius_km: float) -> Optional[dict]:

@@ -25,10 +25,8 @@ class BloodGroup(str, Enum):
 
 
 class UrgencyLevel(str, Enum):
-    CRITICAL = "critical"
-    HIGH = "high"
-    MEDIUM = "medium"
     LOW = "low"
+    HIGH = "high"
 
 
 class RequestStatus(str, Enum):
@@ -109,6 +107,7 @@ class UserDB(BaseModel):
 
 class RequestDB(BaseModel):
     id: Optional[str] = Field(None, alias="_id")
+    short_id: Optional[str] = None
     requester_id: Optional[str] = None
     requester_phone: str
     source: str

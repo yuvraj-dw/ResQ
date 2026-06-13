@@ -20,6 +20,7 @@ from app.repositories.repositories import RequestRepo, UserRepo, NotificationRep
 from app.services.sms_service import sms_service
 from app.services.notification_service import notification_service
 from app.services.matching import MatchingService
+from app.services.ai_parser import AIParserService
 from app.models.models import AppNotificationType
 
 
@@ -42,6 +43,7 @@ def request_to_response(req: dict) -> RequestResponse:
         )
     return RequestResponse(
         _id=str(req["_id"]),
+        short_id=req.get("short_id"),
         requester_id=str(req.get("requester_id", "")) if req.get("requester_id") else None,
         requester_phone=req["requester_phone"],
         source=req["source"],
@@ -64,6 +66,10 @@ async def process_matching(request_id: str, coordinates: list, resource: str, bl
     resource_type = ResourceType(resource)
     bg = BloodGroup(blood_group) if blood_group else None
 
+    req_repo = RequestRepo()
+    req = await req_repo.get_by_id(request_id)
+    short_id = req.get("short_id", request_id[-6:]) if req else request_id[-6:]
+
     volunteers = await matching_svc.find_matching_volunteers(
         request_id=request_id,
         coordinates=coordinates,
@@ -80,9 +86,8 @@ async def process_matching(request_id: str, coordinates: list, resource: str, bl
             location_name=location_name or "unknown location",
             request_coordinates=coordinates,
             requester_phone=requester_phone,
+            short_id=short_id,
         )
-        req_repo = RequestRepo()
-        req = await req_repo.get_by_id(request_id)
         if req and req["status"] == RequestStatus.OPEN.value:
             await req_repo.update_status(request_id, RequestStatus.MATCHED)
 
@@ -134,6 +139,11 @@ async def create_request(
     request_id = await req_repo.create(request_dict)
     created = await req_repo.get_by_id(request_id)
 
+    ai_parser = AIParserService()
+    advisory = await ai_parser.generate_instructions(
+        request_data.resource.value, request_data.raw_message or ""
+    )
+
     background_tasks.add_task(
         process_matching,
         request_id=request_id,
@@ -145,7 +155,9 @@ async def create_request(
         requester_phone=current_user["phone"],
     )
 
-    return request_to_response(created)
+    response = request_to_response(created)
+    response.advisory = advisory
+    return response
 
 
 @router.get("/", response_model=RequestListResponse)

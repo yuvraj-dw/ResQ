@@ -49,13 +49,15 @@ BLOOD_GROUP_KEYWORDS = {
 }
 
 URGENCY_KEYWORDS = {
-    "urgent": UrgencyLevel.CRITICAL,
-    "urgently": UrgencyLevel.CRITICAL,
-    "emergency": UrgencyLevel.CRITICAL,
-    "critical": UrgencyLevel.CRITICAL,
+    "urgent": UrgencyLevel.HIGH,
+    "urgently": UrgencyLevel.HIGH,
+    "emergency": UrgencyLevel.HIGH,
+    "critical": UrgencyLevel.HIGH,
     "asap": UrgencyLevel.HIGH,
-    "important": UrgencyLevel.MEDIUM,
+    "important": UrgencyLevel.HIGH,
     "low": UrgencyLevel.LOW,
+    "minor": UrgencyLevel.LOW,
+    "non-urgent": UrgencyLevel.LOW,
 }
 
 
@@ -72,10 +74,10 @@ def verify_webhook_signature(request_body: bytes, timestamp: str, signature: str
 
 
 async def resolve_request_id(request_id: str, phone: str = None) -> Optional[dict]:
-    """Resolve a request ID that may be a full ObjectId or a short suffix.
-    If phone is provided and the ID is short, searches the user's own requests first,
-    then falls back to all requests."""
     req_repo = RequestRepo()
+    req = await req_repo.get_by_short_id(request_id)
+    if req:
+        return req
     try:
         ObjectId(request_id)
         return await req_repo.get_by_id(request_id)
@@ -195,11 +197,10 @@ async def handle_sms_cancel(phone: str, request_id: Optional[str] = None):
         else:
             lines = []
             for r in open_requests[:5]:
-                rid = str(r["_id"])
-                short = rid[-8:]
+                sid = r.get("short_id", str(r["_id"])[-6:])
                 res = r.get("resource", "?")
                 loc = r.get("location_name", "unknown")
-                lines.append(f"  {short} - {res} near {loc}")
+                lines.append(f"  {sid} - {res} near {loc}")
             ids = "\n".join(lines)
             await sms_service.send_sms(phone, f"You have {len(open_requests)} active request(s). Reply CANCEL <id>:\n{ids}")
             return
@@ -320,11 +321,18 @@ async def process_sms_request(phone: str, message: str, location_name: Optional[
     }
 
     request_id = await req_repo.create(request_dict)
+    request_obj = await req_repo.get_by_id(request_id)
+    short_id = request_obj.get("short_id", request_id[-6:]) if request_obj else request_id[-6:]
 
     resource_label = resource.value
     if blood_group:
         resource_label = f"{blood_group.value} blood"
-    await sms_service.send_request_received(phone, resource_label, location_name or "your area")
+    await sms_service.send_request_received(phone, resource_label, location_name or "your area", short_id=short_id)
+
+    instructions = await ai_parser.generate_instructions(resource.value, message)
+    if instructions:
+        prefix = "ResQ Advisory (LOW urgency)" if urgency == UrgencyLevel.LOW else "ResQ First-Aid Tip"
+        await sms_service.send_sms(phone, f"{prefix}: {instructions}")
 
     matching_svc = MatchingService()
     volunteers = await matching_svc.find_matching_volunteers(
@@ -343,6 +351,7 @@ async def process_sms_request(phone: str, message: str, location_name: Optional[
             location_name=location_name or "unknown",
             request_coordinates=coordinates,
             requester_phone=phone,
+            short_id=short_id,
         )
         await req_repo.update_status(request_id, RequestStatus.MATCHED)
     else:

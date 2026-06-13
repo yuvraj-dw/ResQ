@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional, List
+import random
+import string
 from bson import ObjectId
 from app.core.database import get_database
 from app.models.models import (
@@ -15,6 +17,11 @@ from app.models.models import (
     SMSSessionStep,
     AppNotificationType,
 )
+
+
+def generate_short_id(length: int = 6) -> str:
+    chars = string.ascii_uppercase + string.digits
+    return "".join(random.choices(chars, k=length))
 
 
 class UserRepo:
@@ -91,6 +98,13 @@ class RequestRepo:
     async def create(self, request_data: dict) -> str:
         request_data["created_at"] = datetime.now(timezone.utc)
         request_data["updated_at"] = datetime.now(timezone.utc)
+        if "short_id" not in request_data:
+            for _ in range(5):
+                short_id = generate_short_id()
+                existing = await self.collection.find_one({"short_id": short_id})
+                if not existing:
+                    request_data["short_id"] = short_id
+                    break
         result = await self.collection.insert_one(request_data)
         return str(result.inserted_id)
 
@@ -99,6 +113,9 @@ class RequestRepo:
             return await self.collection.find_one({"_id": ObjectId(request_id)})
         except Exception:
             return None
+
+    async def get_by_short_id(self, short_id: str) -> Optional[dict]:
+        return await self.collection.find_one({"short_id": short_id})
 
     async def update(self, request_id: str, update_data: dict) -> Optional[dict]:
         update_data["updated_at"] = datetime.now(timezone.utc)

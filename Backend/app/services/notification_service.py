@@ -57,6 +57,7 @@ class NotificationService:
         location_name: str,
         request_coordinates: list = None,
         requester_phone: str = None,
+        short_id: str = None,
     ) -> list:
         notifications = []
         sms_tasks = []
@@ -102,7 +103,8 @@ class NotificationService:
             )
 
             sms_tasks.append(self._send_volunteer_sms(
-                volunteer_phone, resource, urgency, distance_km, location_name or "your area", request_id
+                volunteer_phone, resource, urgency, distance_km, location_name or "your area",
+                short_id or request_id
             ))
 
             notifications.append({

@@ -24,6 +24,7 @@ async def connect_to_database():
     await db.database.requests.create_index([("status", 1), ("resource", 1)])
     await db.database.requests.create_index("requester_phone")
     await db.database.requests.create_index("created_at")
+    await db.database.requests.create_index("short_id", unique=True)
 
     await db.database.notifications.create_index([("request_id", 1), ("status", 1)])
     await db.database.notifications.create_index("volunteer_phone")

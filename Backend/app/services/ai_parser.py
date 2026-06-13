@@ -25,6 +25,37 @@ class AIParserService:
             content = re.sub(r"\n?```\s*$", "", content)
         return content.strip()
 
+    async def generate_instructions(self, resource: str, message: str) -> Optional[str]:
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                response = await client.post(
+                    f"{self.base_url}/chat/completions",
+                    headers={
+                        "Authorization": f"Bearer {self.api_key}",
+                        "Content-Type": "application/json",
+                    },
+                    json={
+                        "model": self.model,
+                        "messages": [
+                            {"role": "system", "content": settings.AI_INSTRUCTION_PROMPT},
+                            {"role": "user", "content": f"Emergency type: {resource}. Details: {message}"},
+                        ],
+                        "temperature": 0.3,
+                        "max_tokens": 150,
+                    },
+                )
+
+            if response.status_code != 200:
+                logger.warning(f"DeepInfra instruction API error: {response.status_code}")
+                return None
+
+            data = response.json()
+            content = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+            return content.strip() if content else None
+        except Exception as e:
+            logger.error(f"Instruction generation failed: {e}")
+            return None
+
     async def parse_emergency_message(self, message: str) -> Optional[AIParsedRequest]:
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
