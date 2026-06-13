@@ -60,6 +60,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 
   markAllAsRead: async () => {
     try {
+      await notificationRepository.markAllAsRead();
       const notifications = get().notifications.map((n) => ({ ...n, read: true }));
       set({ notifications, unreadCount: 0 });
     } catch {

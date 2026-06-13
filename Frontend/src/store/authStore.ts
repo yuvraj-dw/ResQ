@@ -6,7 +6,6 @@ import smsRepository from '../repositories/SmsRepository';
 import connectivityService from '../services/connectivity/ConnectivityService';
 import storageService from '../services/storage/StorageService';
 import apiClient from '../services/api/ApiClient';
-import { wsService } from '../services/websocket';
 
 interface AuthStore extends AuthState {
   setRegistrationData: (data: AppRegisterRequest) => void;
@@ -86,7 +85,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
           tokens: { access_token, token_type },
           user,
         });
-        wsService.connect(access_token);
         return { success: true };
       }
       set({ isLoading: false });
@@ -132,7 +130,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
           tokens: { access_token, token_type },
           user,
         });
-        wsService.connect(access_token);
         return { success: true };
       }
       set({ isLoading: false });
@@ -165,7 +162,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   logout: async () => {
-    wsService.disconnect();
     await authRepository.logout();
     await storageService.clearAll();
     set(initialState);

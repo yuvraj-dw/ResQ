@@ -58,15 +58,6 @@ export interface EmergencyFormData {
   longitude: number;
 }
 
-export interface WebSocketMessage {
-  type: 'connected' | 'new_request' | 'request_update' | 'pong' | 'error';
-  data?: EmergencyRequest;
-  request_id?: string;
-  status?: EmergencyStatus;
-  phone?: string;
-  message?: string;
-}
-
 export interface EmergencyLocation {
   emergency_id: string;
   resource: EmergencyResource;
